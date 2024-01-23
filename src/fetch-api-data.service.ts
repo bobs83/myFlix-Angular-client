@@ -7,7 +7,9 @@ import {
 } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-const apiUrl = 'https://movie-api-da5i.onrender.com/';
+import { HttpParams } from '@angular/common/http';
+
+const apiUrl = 'https://mybestflix-9620fb832942.herokuapp.com/';
 
 @Injectable({
   providedIn: 'root',
@@ -38,9 +40,18 @@ export class FetchApiDataService {
    */
   public userLogin(userDetails: any): Observable<any> {
     console.log(userDetails);
-    return this.http
-      .post(apiUrl + 'login', userDetails) // Corrected URL to 'login' endpoint
-      .pipe(catchError(this.handleError));
+
+    const params = new HttpParams()
+      .set('Username', userDetails.Username)
+      .set('Password', userDetails.Password);
+    console.log(params);
+
+    return (
+      this.http
+        .post(apiUrl + 'login', { params })
+        // .get(apiUrl + 'login', { params })
+        .pipe(catchError(this.handleError))
+    );
   }
 
   /**
@@ -159,7 +170,7 @@ export class FetchApiDataService {
    * @param FavMovie The ID or title of the favorite movie.
    * @returns An Observable of the add favorite movie request.
    */
-  addFavMovie(FavoriteMovie: string): Observable<any> {
+  addFavoriteMovie(FavoriteMovie: string): Observable<any> {
     const token = localStorage.getItem('token');
     const userName = JSON.parse(localStorage.getItem('user') || '{}');
     return this.http
@@ -176,7 +187,7 @@ export class FetchApiDataService {
    * @param FavMovie The ID or title of the movie to remove.
    * @returns An Observable of the remove favorite movie request.
    */
-  deleteFavMovie(FavoriteMovie: string): Observable<any> {
+  deleteFavoriteMovie(FavoriteMovie: string): Observable<any> {
     const token = localStorage.getItem('token');
     const userName = JSON.parse(localStorage.getItem('user') || '{}');
     return this.http
