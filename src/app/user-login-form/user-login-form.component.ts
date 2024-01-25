@@ -8,6 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-user-login-form',
   templateUrl: './user-login-form.component.html',
@@ -20,7 +22,8 @@ export class UserLoginFormComponent implements OnInit {
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
     public snackBar: MatSnackBar,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -39,7 +42,10 @@ export class UserLoginFormComponent implements OnInit {
       },
       (result) => {
         console.log(result);
-        this.snackBar.open(result, 'OK', { duration: 2000 });
+        this.snackBar.open('Welcome back!', 'OK', {
+          duration: 2000,
+        });
+        this.router.navigate(['movies']);
       }
     );
   }
