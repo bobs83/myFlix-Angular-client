@@ -41,17 +41,19 @@ export class FetchApiDataService {
   public userLogin(userDetails: any): Observable<any> {
     console.log(userDetails);
 
-    const params = new HttpParams()
-      .set('Username', userDetails.Username)
-      .set('Password', userDetails.Password);
-    console.log(params);
+    let params = '';
+    for (let key in userDetails) {
+      if (userDetails.hasOwnProperty(key)) {
+        params += `&${encodeURIComponent(key)}=${encodeURIComponent(
+          userDetails[key]
+        )}`;
+      }
+    }
+    params = params.substring(1); // remove leading '&'
 
-    return (
-      this.http
-        .post(apiUrl + 'login', { params })
-        // .get(apiUrl + 'login', { params })
-        .pipe(catchError(this.handleError))
-    );
+    const url = `${apiUrl}login?${params}`;
+
+    return this.http.post(url, null).pipe(catchError(this.handleError));
   }
 
   /**
