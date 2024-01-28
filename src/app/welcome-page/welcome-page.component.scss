@@ -1,0 +1,20 @@
+.main-page {
+  display: flex;
+  min-height: 100vh;
+  background-image: url("/assets/img/Small.jpg");
+}
+.back {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  width: 30%;
+  height: 48%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  position: fixed;
+  top: 50%; // Add this line to vertically center the div
+  left: 50%; // Add this line to horizontally center the div
+  transform: translate(-50%, -50%);
+}
