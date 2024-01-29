@@ -1,0 +1,25 @@
+<mat-toolbar class="navbar">
+  <h1 class="navbar-logo">MyFlix</h1>
+  <span class="example-spacer"></span>
+
+  <mat-icon class="nav-icon" aria-hidden="false" aria-label="Movies Icon"
+    >movie</mat-icon
+  >
+  <button mat-button routerLink="/movies">Movies</button>
+  <mat-icon class="nav-icon" aria-hidden="false" aria-label="Favorites Icon"
+    >favorite</mat-icon
+  >
+  <button mat-button routerLink="/favorite">My Movies</button>
+  <mat-icon class="nav-icon" aria-hidden="false" aria-label="Profile Icon"
+    >person</mat-icon
+  >
+  <button mat-button routerLink="/profile">Profile</button>
+  <mat-icon class="logout-button" aria-hidden="false" aria-label="Logout Icon"
+    >exit_to_app</mat-icon
+  >
+  <div class="Logout">
+    <button mat-button (click)="logoutUser()" aria-label="Logout Button">
+      Logout
+    </button>
+  </div>
+</mat-toolbar>
