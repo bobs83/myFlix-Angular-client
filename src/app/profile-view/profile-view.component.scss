@@ -1,0 +1,55 @@
+.profile-page {
+  background-color: #141414;
+  height: 100vh;
+  color: #ffffff;
+  padding: 1rem;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 50%;
+}
+
+.profile-title {
+  text-align: center;
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.button-container {
+  width: 100%;
+  margin: 10px 0; /* Add some margin for spacing */
+}
+
+.update-btn,
+.delete-btn {
+  font-size: 18px;
+  padding: 1.3rem;
+  color: #e8f7ee;
+  border: none;
+  cursor: pointer;
+  width: 100%; /* Make buttons fill the container */
+}
+
+.update-btn {
+  background-color: #0d6b5f;
+}
+
+.delete-btn {
+  background-color: #a51c30;
+}
+
+@media screen and (max-width: 768px) {
+  .profile-form {
+    max-width: 80%;
+  }
+
+  .update-btn,
+  .delete-btn {
+    font-size: 14px;
+    padding: 1rem;
+  }
+}

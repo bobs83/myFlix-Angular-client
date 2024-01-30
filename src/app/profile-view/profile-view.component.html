@@ -1,0 +1,60 @@
+<div class="profile-page">
+  <h1 class="profile-title">Your Profile</h1>
+
+  <form class="profile-form" (ngSubmit)="submitForm()">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Username"
+        name="Username"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Password"
+        type="password"
+        name="Password"
+        placeholder="Input old or new password to make a change"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Email"
+        type="email"
+        name="Email"
+        required
+      />
+    </mat-form-field>
+
+    <mat-card-actions>
+      <div class="button-container">
+        <button
+          class="update-btn"
+          mat-raised-button
+          type="submit"
+          (click)="updateUser()"
+        >
+          Update User
+        </button>
+      </div>
+      <div class="button-container">
+        <button
+          class="delete-btn"
+          mat-raised-button
+          type="button"
+          (click)="deleteUser()"
+        >
+          Delete User
+        </button>
+      </div>
+    </mat-card-actions>
+  </form>
+</div>

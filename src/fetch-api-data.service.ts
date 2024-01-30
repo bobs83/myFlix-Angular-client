@@ -7,8 +7,6 @@ import {
 } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-import { HttpParams } from '@angular/common/http';
-
 const apiUrl = 'https://mybestflix-9620fb832942.herokuapp.com/';
 
 @Injectable({
@@ -135,36 +133,38 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  /**
-   * Updates a user's data.
-   * @param userName The username.
-   * @returns An Observable of the update request.
-   */
-  updateUser(userName: string): Observable<any> {
+  editUser(updatedUser: any): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
+
+    console.log('Attempting to update user:', user.Username, updatedUser); // Debugging
+
     return this.http
-      .put(apiUrl + 'users/' + userName, {
+      .put(apiUrl + 'users/' + user.Username, updatedUser, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
       })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
+      .pipe(
+        map(this.extractResponseData),
+        catchError((error) => {
+          console.error('Error in editUser:', error);
+          return throwError(() => new Error('Error editing user'));
+        })
+      );
   }
 
-  /**
-   * Deletes a user.
-   * @param userName The username of the user to delete.
-   * @returns An Observable of the delete request.
-   */
-  deleteUser(userName: string): Observable<any> {
+  deleteUser(): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
+
     return this.http
-      .delete(apiUrl + 'users/' + userName, {
+      .delete(apiUrl + 'users/' + user.Username, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
       })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
   /**
@@ -191,9 +191,9 @@ export class FetchApiDataService {
    */
   deleteFavoriteMovie(FavoriteMovie: string): Observable<any> {
     const token = localStorage.getItem('token');
-    const userName = JSON.parse(localStorage.getItem('user') || '{}');
+    const Username = JSON.parse(localStorage.getItem('user') || '{}');
     return this.http
-      .delete(apiUrl + 'users/' + userName + '/movies/' + FavoriteMovie, {
+      .delete(apiUrl + 'users/' + Username + '/movies/' + FavoriteMovie, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
