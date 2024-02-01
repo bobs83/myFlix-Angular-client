@@ -19,12 +19,14 @@ type User = {
 })
 export class ProfileViewComponent implements OnInit {
   user: User = {};
+  favoriteMovies: any[] = [];
 
   @Input() userData: User = {
     Username: '',
     Password: '',
     Email: '',
-    // Birthday: '',
+    Birthday: '',
+    FavoriteMovies: [],
   };
 
   constructor(
@@ -33,23 +35,29 @@ export class ProfileViewComponent implements OnInit {
     public router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.user = this.getUser();
-    this.userData = {
-      ...this.user,
-      Password: '', // Password is kept empty for security
-    };
-  }
-
   submitForm() {
     // Handle the form submission logic here
     console.log('Form submitted', this.userData);
   }
+  ngOnInit(): void {
+    this.getUser();
+  }
 
-  getUser(): User {
+  getUser(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     console.log('Retrieved user:', user);
-    return user;
+
+    this.fetchApiData.getAllMovies().subscribe((response: any) => {
+      this.favoriteMovies = response.filter(
+        (m: { _id: any }) => user.FavoriteMovies?.indexOf(m._id) >= 0
+      );
+      this.user = user;
+      this.userData = {
+        ...this.user,
+        Password: '', // Password is kept empty for security
+        FavoriteMovies: this.favoriteMovies,
+      };
+    });
   }
 
   updateUser(): void {
@@ -61,7 +69,6 @@ export class ProfileViewComponent implements OnInit {
         this.snackBar.open('Your profile has been updated', 'OK', {
           duration: 3000,
         });
-        // Consider updating UI components or redirecting using Angular's Router
       },
       (error) => {
         console.error('Update error:', error);
