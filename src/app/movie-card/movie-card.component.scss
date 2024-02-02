@@ -1,0 +1,113 @@
+/* Base Styles */
+.movie-page {
+  background-color: #141414;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+mat-card {
+  border: 0.1px solid #4d4a4a;
+  flex: 0 1 300px;
+  overflow: hidden;
+  height: 100%;
+}
+
+mat-card-header {
+  background-color: #000000;
+  padding: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+mat-card-title,
+mat-card-subtitle {
+  color: #ae0610;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+mat-card-actions {
+  background-color: #000000;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+
+  :hover {
+    background-color: #141414;
+  }
+}
+
+button.mat-button {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+button.mat-button:last-child {
+  margin-right: 0;
+}
+
+/* Image Styling inside Card */
+mat-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+mat-icon {
+  color: #ae0610;
+}
+
+/* Adaptive Media Queries */
+
+/* For tablets and small desktops */
+@media (max-width: 1024px) {
+  mat-card {
+    flex: 0 1 45%; /* Adjust the size of the cards */
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .movie-page {
+    gap: 10px;
+  }
+
+  mat-card {
+    flex: 0 1 100%; /* Cards take full width on mobile */
+    height: 350px; /* Adjusted height for cards on small screens */
+  }
+
+  mat-card-header,
+  mat-card-actions {
+    padding: 5px;
+    flex: 0 0 auto; /* Prevent these from shrinking */
+    // align-items: center;
+  }
+
+  mat-card img {
+    object-fit: cover; /* Ensures the image covers the area, cropping if necessary */
+    height: 70%; /* Allocate 60% of the card's height to the image */
+  }
+
+  button.mat-button {
+    margin-right: 5px;
+  }
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 480px) {
+  mat-card-title,
+  mat-card-subtitle {
+    font-size: 14px; /* Smaller font size for titles and subtitles */
+  }
+
+  button.mat-button {
+    padding: 5px;
+    font-size: 12px; /* Smaller buttons and text */
+  }
+}

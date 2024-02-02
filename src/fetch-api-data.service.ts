@@ -54,10 +54,6 @@ export class FetchApiDataService {
     return this.http.post(url, null).pipe(catchError(this.handleError));
   }
 
-  /**
-   * Retrieves all movies.
-   * @returns An Observable with the list of all movies.
-   */
   getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
@@ -69,11 +65,6 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  /**
-   * Retrieves a specific movie by title.
-   * @param title The title of the movie.
-   * @returns An Observable with the requested movie data.
-   */
   getOneMovie(title: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
@@ -85,11 +76,6 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  /**
-   * Retrieves information about a director.
-   * @param directorName The name of the director.
-   * @returns An Observable with the director's data.
-   */
   getDirector(directorName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
@@ -101,11 +87,6 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  /**
-   * Retrieves information about a specific genre.
-   * @param genreName The name of the genre.
-   * @returns An Observable with the genre's data.
-   */
   getGenre(genreName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
@@ -117,11 +98,6 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  /**
-   * Retrieves a user's data.
-   * @param userName The username.
-   * @returns An Observable with the user's data.
-   */
   getUser(userName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
@@ -167,72 +143,81 @@ export class FetchApiDataService {
       .pipe(catchError(this.handleError));
   }
 
+  public getFavoriteMovies(): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const token = localStorage.getItem('token');
+    return this.http
+      .get(apiUrl + 'users/' + user.Username, {
+        headers: new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+        }),
+      })
+      .pipe(
+        map(this.extractResponseData),
+        map((data) => data.FavoriteMovies),
+        catchError(this.handleError)
+      );
+  }
+
+  isFavoriteMovie(movieId: string): boolean {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    // Ensure favoriteMovies is always treated as an array
+    const favoriteMovies = Array.isArray(user.favoriteMovies)
+      ? user.favoriteMovies
+      : [];
+    return favoriteMovies.indexOf(movieId) >= 0;
+  }
+
   /**
    * Adds a movie to a user's list of favorite movies.
    * @param FavMovie The ID or title of the favorite movie.
    * @returns An Observable of the add favorite movie request.
    */
-  addFavoriteMovie(FavoriteMovie: string): Observable<any> {
+  public addFavoriteMovie(movie.Id: string): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
-    const userName = JSON.parse(localStorage.getItem('user') || '{}');
+    user.FavoriteMovies.push(movie.Id);
+    localStorage.setItem('user', JSON.stringify(user));
     return this.http
-      .post(apiUrl + 'users/' + userName + '/movies/' + FavoriteMovie, {
+      .post(
+        apiUrl + 'users/' + user.Username + '/movies/' + movie.Id,
+        {},
+        {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + token,
+          }),
+          responseType: 'text',
+        }
+      )
+      .pipe(map(this.extractResponseData), catchError(this.handleError));
+  }
+
+  public deleteFavoriteMovie(movieId: string): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const token = localStorage.getItem('token');
+
+    const index = user.FavoriteMovies.indexOf(movieId);
+    console.log(index);
+    if (index > -1) {
+      // only splice array when item is found
+      user.FavoriteMovies.splice(index, 1); // 2nd parameter means remove one item only
+    }
+    localStorage.setItem('user', JSON.stringify(user));
+    return this.http
+      .delete(apiUrl + 'users/' + user.Username + '/movies/' + movieId, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
+        responseType: 'text',
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  /**
-   * Removes a movie from a user's list of favorite movies.
-   * @param FavMovie The ID or title of the movie to remove.
-   * @returns An Observable of the remove favorite movie request.
-   */
-  deleteFavoriteMovie(FavoriteMovie: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    const Username = JSON.parse(localStorage.getItem('user') || '{}');
-    return this.http
-      .delete(apiUrl + 'users/' + Username + '/movies/' + FavoriteMovie, {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-        }),
-      })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
-  }
-
-  /**
-   * Retrieves a user's list of favorite movies.
-   * @returns An Observable with the user's favorite movies.
-   */
-  getFavoriteMovie(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const userName = JSON.parse(localStorage.getItem('user') || '{}');
-    return this.http
-      .get(apiUrl + 'users/' + userName, {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-        }),
-      })
-      .pipe(map(this.extractResponseData), catchError(this.handleError));
-  }
-
-  /**
-   * Non-typed response extraction.
-   * Extracts the body of the response and returns it.
-   * @param res The HTTP response.
-   * @returns The body of the response or an empty object.
-   */
   private extractResponseData(res: any): any {
     const body = res;
     return body || {};
   }
 
-  /**
-   * Handles errors occurred during HTTP requests.
-   * @param error The HttpErrorResponse to handle.
-   * @returns An Observable throwing an error message.
-   */
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       console.error('An error occurred:', error.error.message);
