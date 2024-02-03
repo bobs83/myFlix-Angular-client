@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError, BehaviorSubject, tap } from 'rxjs';
 import {
   HttpClient,
   HttpHeaders,
@@ -13,6 +13,17 @@ const apiUrl = 'https://mybestflix-9620fb832942.herokuapp.com/';
   providedIn: 'root',
 })
 export class FetchApiDataService {
+  private userData = new BehaviorSubject<Object>({
+    Username: '',
+    Password: '',
+    Email: '',
+    Birth: '',
+  });
+  currentUser = this.userData.asObservable();
+
+  private movies = new BehaviorSubject<Object>({});
+  moviesList = this.movies.asObservable();
+
   /**
    * Constructor to inject HttpClient into the service.
    * @param http The HttpClient which is used for making HTTP requests.
@@ -53,6 +64,11 @@ export class FetchApiDataService {
 
     return this.http.post(url, null).pipe(catchError(this.handleError));
   }
+
+  /**
+   * Retrieves all movies.
+   * @returns An Observable with the list of all movies.
+   */
 
   getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
@@ -154,18 +170,19 @@ export class FetchApiDataService {
       })
       .pipe(
         map(this.extractResponseData),
-        map((data) => data.FavoriteMovies),
+        tap((data) => console.log(data.FavoriteMovies)), // Logging the favorite movies here
+        map((data) => data.FavoriteMovies), // Continue the stream with the favorite movies
         catchError(this.handleError)
       );
   }
 
   isFavoriteMovie(movieId: string): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    // Ensure favoriteMovies is always treated as an array
-    const favoriteMovies = Array.isArray(user.favoriteMovies)
-      ? user.favoriteMovies
+    // Ensures FavoriteMovies is always treated as an array and access the correct property name
+    const favoriteMovies = Array.isArray(user.FavoriteMovies)
+      ? user.FavoriteMovies
       : [];
-    return favoriteMovies.indexOf(movieId) >= 0;
+    return favoriteMovies.includes(movieId);
   }
 
   /**
@@ -173,14 +190,18 @@ export class FetchApiDataService {
    * @param FavMovie The ID or title of the favorite movie.
    * @returns An Observable of the add favorite movie request.
    */
-  public addFavoriteMovie(movie.Id: string): Observable<any> {
+  public addFavoriteMovie(movieId: string): Observable<any> {
+    if (!movieId) {
+      console.error('movieId is undefined');
+      return throwError(() => new Error('movieId is undefined'));
+    }
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
-    user.FavoriteMovies.push(movie.Id);
+    user.FavoriteMovies.push(movieId);
     localStorage.setItem('user', JSON.stringify(user));
     return this.http
       .post(
-        apiUrl + 'users/' + user.Username + '/movies/' + movie.Id,
+        apiUrl + 'users/' + user.Username + '/movies/' + movieId,
         {},
         {
           headers: new HttpHeaders({
@@ -199,8 +220,7 @@ export class FetchApiDataService {
     const index = user.FavoriteMovies.indexOf(movieId);
     console.log(index);
     if (index > -1) {
-      // only splice array when item is found
-      user.FavoriteMovies.splice(index, 1); // 2nd parameter means remove one item only
+      user.FavoriteMovies.splice(index, 1);
     }
     localStorage.setItem('user', JSON.stringify(user));
     return this.http

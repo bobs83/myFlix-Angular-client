@@ -24,11 +24,13 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ProfileViewComponent } from './profile-view/profile-view.component';
+import { FavoriteMoviesComponent } from './favorite-movies/favorite-movies.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'movies', component: MovieCardComponent },
   { path: 'profile', component: ProfileViewComponent },
+  { path: 'favorite', component: FavoriteMoviesComponent },
   { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
 ];
 
@@ -58,6 +60,7 @@ const appRoutes: Routes = [
     WelcomePageComponent,
     NavbarComponent,
     ProfileViewComponent,
+    FavoriteMoviesComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],

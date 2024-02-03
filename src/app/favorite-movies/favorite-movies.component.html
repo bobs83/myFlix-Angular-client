@@ -1,0 +1,24 @@
+<div class="favorite-header">
+  <br />
+  Favorite Movies
+  <hr />
+</div>
+<div class="favorite-page">
+  <mat-card *ngFor="let movie of movies">
+    <mat-card-header>
+      <mat-card-title>{{ movie.Title }}</mat-card-title>
+      <mat-card-subtitle> Rating: {{ movie.Rate }}/10</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="movie.ImageURL" [alt]="movie.Title" />
+    <mat-card-actions>
+      <button mat-button color="primary">Genre</button>
+      <button mat-button color="primary">Director</button>
+      <button mat-button color="primary">Synopsis</button>
+      <button mat-icon-button (click)="toggleFavorite(movie._id)">
+        <mat-icon>
+          {{ isFavorite(movie._id) ? "favorite" : "favorite_border" }}</mat-icon
+        >
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
