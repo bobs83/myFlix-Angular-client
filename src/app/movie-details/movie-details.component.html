@@ -1,0 +1,18 @@
+<mat-card class="movie-details-dialog">
+  <button
+    class="movie-details-close-button"
+    mat-stroked-button
+    aria-label="Close the summary button"
+    mat-dialog-close
+    color="primary"
+  >
+    X
+  </button>
+  <br />
+  <mat-card-title>
+    <h3 class="movie-details-title">Description:</h3>
+  </mat-card-title>
+  <mat-dialog-content class="movie-details-dialog-content">
+    {{ data.details }}
+  </mat-dialog-content>
+</mat-card>

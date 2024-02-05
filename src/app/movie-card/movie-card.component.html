@@ -6,13 +6,27 @@
     </mat-card-header>
     <img mat-card-image [src]="movie.ImageURL" [alt]="movie.Title" />
     <mat-card-actions>
-      <button mat-button color="primary">Genre</button>
-      <button mat-button color="primary">Director</button>
-      <button mat-button color="primary">Synopsis</button>
+      <button mat-button color="primary" (click)="getGenre(movie.Genre)">
+        Genre
+      </button>
+      <button
+        mat-button
+        color="primary"
+        (click)="getOneDirector(movie.Director)"
+      >
+        Director
+      </button>
+      <button
+        mat-button
+        color="primary"
+        (click)="openMovieDetails(movie.Description)"
+      >
+        Synopsis
+      </button>
 
-      <button mat-icon-button (click)="toggleFavorite(movie.id)">
+      <button mat-icon-button (click)="toggleFavorite(movie._id)">
         <mat-icon>
-          {{ isFavorite(movie.id) ? "favorite" : "favorite_border" }}</mat-icon
+          {{ isFavorite(movie._id) ? "favorite" : "favorite_border" }}</mat-icon
         >
       </button>
     </mat-card-actions>

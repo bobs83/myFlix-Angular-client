@@ -1,0 +1,41 @@
+.director-dialog {
+  display: block;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.director-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+}
+
+.director-dialog-title {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.director-dialog-content {
+  color: #666;
+  line-height: 1.6;
+}
+
+b {
+  color: #333;
+}
+
+mat-card-title,
+mat-dialog-content {
+  padding: 0 20px;
+}

@@ -45,6 +45,7 @@ export class FavoriteMoviesComponent implements OnInit {
       this.movies = resp.filter((movie: any) =>
         this.favoriteMovieIds.includes(movie._id)
       ); // Filter movies to only include favorites
+      console.log(this.movies);
     });
   }
 
