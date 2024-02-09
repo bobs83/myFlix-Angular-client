@@ -30,6 +30,7 @@ import { GenreComponent } from './genre/genre.component';
 import { DirectorComponent } from './director/director.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 
+// Define routes for RouterModule
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'movies', component: MovieCardComponent },
@@ -38,6 +39,10 @@ const appRoutes: Routes = [
   { path: '', redirectTo: 'welcome', pathMatch: 'full' }, // Redirect to welcome page
 ];
 
+/**
+ * The root module of the Angular application.
+ * @NgModule decorator indicates that this class is an NgModule and provides metadata about the module.
+ */
 @NgModule({
   imports: [
     BrowserModule,
@@ -69,7 +74,7 @@ const appRoutes: Routes = [
     DirectorComponent,
     MovieDetailsComponent,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers: [], // Array of dependency injection providers for services that the injector uses to resolve dependencies for a class.
+  bootstrap: [AppComponent], // The main application view, called the root component, which hosts all other app views.
 })
 export class AppModule {}
