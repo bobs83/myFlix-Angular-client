@@ -2,10 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /**
- * @description Component representing a genre card.
- * @selector 'app-genre'
- * @templateUrl './genre.component.html'
- * @styleUrls ['../genre.component.scss']
+ * Component for displaying information about a movie genre.
+ * It uses Angular Material dialog to present genre details such as title and description.
  */
 
 @Component({
@@ -15,9 +13,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class GenreComponent implements OnInit {
   /**
-   * This is the constructor for the component
-   * @param data
-   * @returns Genre Title and Description
+   * Injects genre data into the component. The data includes genre details
+   * such as title and description which are used to populate the dialog.
+   *
+   * @param data An object containing the genre details. Expected to have properties
+   * like `name` for the genre's title and `description` for its description.
    */
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { genre: any }) {}

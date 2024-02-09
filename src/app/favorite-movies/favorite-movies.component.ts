@@ -1,21 +1,30 @@
-// Import necessary Angular core modules and services for component functionality
 import { Component, OnInit } from '@angular/core';
-import { FetchApiDataService } from '../../fetch-api-data.service';
+import { FetchApiDataService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-// Component decorator to define metadata for FavoriteMoviesComponent
+/**
+ * Component responsible for displaying and managing a user's favorite movies.
+ */
 @Component({
   selector: 'app-favorite-movies',
   templateUrl: './favorite-movies.component.html',
   styleUrls: ['./favorite-movies.component.scss'],
 })
 export class FavoriteMoviesComponent implements OnInit {
-  movies: any[] = []; // Array to store movie objects
-  favoriteMovieIds: string[] = []; // Array to store IDs of favorite movies
+  /** Array to store movie objects that the user has marked as favorites. */
+  movies: any[] = [];
+  /** Array to store IDs of the user's favorite movies for quick access and manipulation. */
+  favoriteMovieIds: string[] = [];
 
-  // Constructor to inject services into the component
+  /**
+   * Constructor for FavoriteMoviesComponent.
+   * @param fetchApiData Service to fetch movie data from the backend.
+   * @param router Service to navigate between routes.
+   * @param snackBar Service to display notifications.
+   * @param dialog Service to handle modal dialogs.
+   */
   constructor(
     public fetchApiData: FetchApiDataService,
     public router: Router,
@@ -24,74 +33,75 @@ export class FavoriteMoviesComponent implements OnInit {
   ) {}
 
   /**
-   * OnInit lifecycle hook to check user status and fetch favorite movies on component initialization.
+   * OnInit lifecycle hook to initialize the component by fetching the user's favorite movies.
    */
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}'); // Retrieve user data from local storage
+    this.checkUserStatusAndFetchFavorites();
+  }
+
+  /**
+   * Checks if a user is logged in and fetches their favorite movies if they are.
+   * Redirects to the welcome page if the user is not logged in.
+   * If the user is logged in, it fetches the user's favorite movies and stores them in the component.
+   */
+  private checkUserStatusAndFetchFavorites(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (!user || !user._id) {
-      // If no user data or user ID is found, redirect to the welcome page
       this.router.navigate(['welcome']);
       return;
     }
-    this.favoriteMovieIds = user.FavoriteMovies || []; // Initialize favoriteMovieIds with user's favorite movies
-    this.getMovies(); // Fetch favorite movies
+    this.favoriteMovieIds = user.FavoriteMovies || [];
+    this.getMovies();
   }
 
   /**
    * Fetches all movies and filters them to only include the user's favorites.
    */
   getMovies(): void {
-    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
-      this.movies = resp.filter((movie: any) =>
+    this.fetchApiData.getAllMovies().subscribe((resp: any[]) => {
+      this.movies = resp.filter((movie) =>
         this.favoriteMovieIds.includes(movie._id)
-      ); // Filter movies to only include favorites
-      console.log(this.movies);
+      );
     });
   }
 
   /**
-   * Toggles the favorite status of a movie. Adds the movie to favorites if not already present, otherwise removes it.
+   * Toggles the favorite status of a movie by adding or removing it from the user's favorites.
    * @param id The ID of the movie to toggle.
    */
   toggleFavorite(id: string): void {
-    if (this.isFavorite(id)) {
-      this.removeFavorite(id); // Remove from favorites if it's already a favorite
-    } else {
-      this.addFavorite(id); // Add to favorites if it's not already a favorite
-    }
+    this.isFavorite(id) ? this.removeFavorite(id) : this.addFavorite(id);
   }
 
   /**
-   * Adds a movie to the user's list of favorites and shows a notification.
+   * Adds a movie to the user's list of favorites and shows a success notification.
    * @param id The ID of the movie to add to favorites.
    */
   addFavorite(id: string): void {
     this.fetchApiData.addFavoriteMovie(id).subscribe(() => {
-      this.snackBar.open('Added to favorite list', 'OK', { duration: 2000 }); // Show success notification
+      this.snackBar.open('Added to favorite list', 'OK', { duration: 2000 });
     });
   }
 
   /**
-   * Checks if a movie is in the user's list of favorites.
+   * Checks if a movie is among the user's favorites.
    * @param id The ID of the movie to check.
-   * @returns Boolean indicating whether the movie is a favorite.
+   * @returns True if the movie is a favorite; otherwise, false.
    */
   isFavorite(id: string): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return (
-      Array.isArray(user.FavoriteMovies) && user.FavoriteMovies.includes(id)
-    ); // Return true if movie is a favorite
+    return user.FavoriteMovies && user.FavoriteMovies.includes(id);
   }
 
   /**
-   * Removes a movie from the user's list of favorites and shows a notification.
+   * Removes a movie from the user's list of favorites and shows a success notification.
    * @param id The ID of the movie to remove from favorites.
    */
   removeFavorite(id: string): void {
     this.fetchApiData.deleteFavoriteMovie(id).subscribe(() => {
       this.snackBar.open('Removed from favorite list', 'OK', {
         duration: 2000,
-      }); // Show success notification
+      });
     });
   }
 }

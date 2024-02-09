@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FetchApiDataService } from '../../fetch-api-data.service';
+import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -18,8 +18,16 @@ type User = {
   styleUrls: ['./profile-view.component.scss'],
 })
 export class ProfileViewComponent implements OnInit {
+  /** Holds the current user's profile data. */
   user: User = {};
+
+  /** Stores a list of the user's favorite movies. */
   favoriteMovies: any[] = [];
+
+  /**
+   * Input property to receive user data, from a parent component.
+   * It initializes with default empty values and a favorite movies list.
+   */
 
   @Input() userData: User = {
     Username: '',
@@ -29,12 +37,23 @@ export class ProfileViewComponent implements OnInit {
     FavoriteMovies: [],
   };
 
+  /**
+   * Constructs the UserProfile component with necessary dependencies.
+   *
+   * @param fetchApiData Service to fetch data from the backend API.
+   * @param snackBar Service to display notifications.
+   * @param router Service for navigating to different pages.
+   */
+
   constructor(
     public fetchApiData: FetchApiDataService,
     public snackBar: MatSnackBar,
     public router: Router
   ) {}
 
+  /**
+   * Placeholder for form submission logic.
+   */
   submitForm() {
     // Handle the form submission logic here
     console.log('Form submitted', this.userData);
@@ -42,6 +61,10 @@ export class ProfileViewComponent implements OnInit {
   ngOnInit(): void {
     this.getUser();
   }
+
+  /**
+   * Retrieves the user's data from local storage and updates the component's user and favoriteMovies properties.
+   */
 
   getUser(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -59,6 +82,10 @@ export class ProfileViewComponent implements OnInit {
       };
     });
   }
+
+  /**
+   * Updates the user's data on the server and locally, then notifies the user of success or error.
+   */
 
   updateUser(): void {
     this.fetchApiData.editUser(this.userData).subscribe(
@@ -84,6 +111,10 @@ export class ProfileViewComponent implements OnInit {
     );
   }
 
+  /**
+   * Confirms with the user before deleting their account, then proceeds with the deletion.
+   */
+
   deleteUser(): void {
     if (confirm('Do you want to delete your account permanently?')) {
       this.fetchApiData.deleteUser().subscribe(
@@ -96,7 +127,7 @@ export class ProfileViewComponent implements OnInit {
             });
           });
         },
-        (error) => {
+        (err) => {
           // handle error
           this.snackBar.open('Error deleting account', 'OK', {
             duration: 3000,

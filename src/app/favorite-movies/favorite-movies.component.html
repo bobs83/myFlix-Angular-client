@@ -15,6 +15,7 @@
       <button mat-button color="primary">Genre</button>
       <button mat-button color="primary">Director</button>
       <button mat-button color="primary">Synopsis</button>
+
       <button mat-icon-button (click)="toggleFavorite(movie._id)">
         <mat-icon>
           {{ isFavorite(movie._id) ? "favorite" : "favorite_border" }}</mat-icon
