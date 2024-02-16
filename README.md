@@ -1,5 +1,11 @@
 # myFlix Angular App
 
+![Main-view of myflix ](https://raw.githubusercontent.com/bobs83/myFlix-Angular-client/master/readme-pics/login-view.png)
+
+![movie-view of myflix ](https://raw.githubusercontent.com/bobs83/myFlix-Angular-client/master/readme-pics/main-view.png)
+
+
+
 ## Overview
 
 The myFlix Angular App is a single-page, responsive application designed to let users explore a select range of movies, their directors, and genres. Developed with Angular, this client-side application interfaces with an existing server-side REST API and database, offering users access to a curated database of movie information. This project showcases Angular development skills, emphasizing the ability to create dynamic and responsive web applications.
@@ -28,7 +34,19 @@ The myFlix Angular App is a single-page, responsive application designed to let 
 
 ## Link to app
 
-You can find it [here](https://bobs83.github.io/myFlix-Angular-client/welcome)
+You can find the link to the app [here](https://bobs83.github.io/myFlix-Angular-client/welcome)
+
+## Documentaion 
+
+[TypeDoc](https://bobs83.github.io/myFlix-Angular-client/docs/index.html) documentation
+
+
+## Resources 
+
+Background image on the welcome page is courtesy of Unsplash, photo by [Samuel Regan-Asante](https://unsplash.com/@reganography)
+
+Comments in the code were created with assistance from [ChatGPT](https://chat.openai.com) to provide Typdoc documentation. 
+
 
 ## Installation
 
