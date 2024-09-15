@@ -26,7 +26,7 @@ The myFlix Angular App is a single-page, responsive application designed to let 
 
 ## Technical Requirements
 
-- Angular (version 9 or later)
+- Angular
 - Latest version of Node.js and npm package
 - Angular Material for design
 - Typedoc for codebase comments
